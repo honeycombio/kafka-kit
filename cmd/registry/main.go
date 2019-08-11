@@ -8,8 +8,8 @@ import (
 	"os/signal"
 	"sync"
 
-	"github.com/DataDog/kafka-kit/kafkazk"
-	"github.com/DataDog/kafka-kit/registry/server"
+	"github.com/honeycombio/kafka-kit/kafkazk"
+	"github.com/honeycombio/kafka-kit/registry/server"
 
 	"github.com/jamiealquiza/envy"
 )

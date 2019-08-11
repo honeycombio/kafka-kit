@@ -6,7 +6,7 @@ import (
 	"reflect"
 	"strings"
 
-	pb "github.com/DataDog/kafka-kit/registry/protos"
+	pb "github.com/honeycombio/kafka-kit/registry/protos"
 )
 
 var (

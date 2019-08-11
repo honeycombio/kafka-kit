@@ -5,7 +5,7 @@ import (
 	"sort"
 	"testing"
 
-	"github.com/DataDog/kafka-kit/kafkazk"
+	"github.com/honeycombio/kafka-kit/kafkazk"
 )
 
 const (

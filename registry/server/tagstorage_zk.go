@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/DataDog/kafka-kit/kafkazk"
+	"github.com/honeycombio/kafka-kit/kafkazk"
 )
 
 // ZKTagStorage implements tag persistence in ZooKeeper.

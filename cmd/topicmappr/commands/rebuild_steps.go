@@ -4,13 +4,13 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/DataDog/kafka-kit/kafkazk"
+	"github.com/honeycombio/kafka-kit/kafkazk"
 
 	"github.com/spf13/cobra"
 )
 
 // *References to metrics metadata persisted in ZooKeeper, see:
-// https://github.com/DataDog/kafka-kit/tree/master/cmd/metricsfetcher#data-structures)
+// https://github.com/honeycombio/kafka-kit/tree/master/cmd/metricsfetcher#data-structures)
 
 // getPartitionMap returns a map of of partition, topic config
 // (particuarly what brokers compose every replica set) for all

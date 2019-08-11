@@ -10,7 +10,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/DataDog/kafka-kit/kafkazk"
+	"github.com/honeycombio/kafka-kit/kafkazk"
 
 	"github.com/spf13/cobra"
 )

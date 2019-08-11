@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"sort"
 
-	"github.com/DataDog/kafka-kit/kafkametrics"
+	"github.com/honeycombio/kafka-kit/kafkametrics"
 )
 
 // bmapBundle holds several maps

@@ -409,7 +409,7 @@ func TestRebuildByCountSA(t *testing.T) {
 	delete(bm, 1002)
 
 	pm, _ := PartitionMapFromString(testGetMapString4("test_topic"))
-	// Until https://github.com/DataDog/kafka-kit/issues/187 is closed,
+	// Until https://github.com/honeycombio/kafka-kit/issues/187 is closed,
 	// we need to pretend another broker with rack b was present.
 	pm.Partitions[2].Replicas = []int{1001, 1005}
 
