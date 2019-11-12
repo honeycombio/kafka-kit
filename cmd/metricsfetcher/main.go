@@ -10,17 +10,15 @@ import (
 	"os"
 
 	"github.com/honeycombio/kafka-kit/kafkazk"
-
 	"github.com/jamiealquiza/envy"
-	dd "github.com/zorkian/go-datadog-api"
+	wf "github.com/spaceapegames/go-wavefront"
 )
 
 // Config holds
 // config parameters.
 type Config struct {
-	Client      *dd.Client
+	Client      *wf.Client
 	APIKey      string
-	AppKey      string
 	PartnQuery  string
 	BrokerQuery string
 	BrokerIDTag string
@@ -35,13 +33,11 @@ type Config struct {
 var config = &Config{} // :(
 
 func init() {
-	flag.StringVar(&config.APIKey, "api-key", "", "Datadog API key")
-	flag.StringVar(&config.AppKey, "app-key", "", "Datadog app key")
-	bq := flag.String("broker-storage-query", "avg:system.disk.free{service:kafka,device:/data}", "Datadog metric query to get broker storage free")
-	flag.StringVar(&config.BrokerIDTag, "broker-id-tag", "broker_id", "Datadog host tag for broker ID")
-	pq := flag.String("partition-size-query", "max:kafka.log.partition.size{service:kafka} by {topic,partition}", "Datadog metric query to get partition size by topic, partition")
+	flag.StringVar(&config.APIKey, "api-key", "", "Wavefront API key")
+	bq := flag.String("broker-storage-query", "ts(disk.free, env=production and aws_role='kafka' and path='/var/lib/kafka')", "Wavefront metric query to get broker storage free.")
+	pq := flag.String("partition-size-query", "max(ts(kafka.server.brokertopics.size.Value, env=production), topic, partition)", "Wavefront query to get partition size by topic, partition")
 	flag.IntVar(&config.Span, "span", 3600, "Query range in seconds (now - span)")
-	flag.StringVar(&config.ZKAddr, "zk-addr", "localhost:2181", "ZooKeeper connect string")
+	flag.StringVar(&config.ZKAddr, "zk-addr", "zk1:2181,zk2:2181,zk3:2181", "ZooKeeper connect string")
 	flag.StringVar(&config.ZKPrefix, "zk-prefix", "topicmappr", "ZooKeeper namespace prefix")
 	flag.BoolVar(&config.Verbose, "verbose", false, "Verbose output")
 	flag.BoolVar(&config.DryRun, "dry-run", false, "Dry run mode (don't reach Zookeeper)")
@@ -51,13 +47,18 @@ func init() {
 	flag.Parse()
 
 	// Complete query string.
-	config.BrokerQuery = fmt.Sprintf("%s by {%s}.rollup(avg, %d)", *bq, config.BrokerIDTag, config.Span)
-	config.PartnQuery = fmt.Sprintf("%s.rollup(avg, %d)", *pq, config.Span)
+	config.BrokerQuery = client.NewQuery(wavefront.NewQueryParams(fmt.Sprintf(*bq, config.BrokerIDTag))
+	config.PartnQuery.SetStartTime(int64(config.Span * time.Second))
+	config.PartnQuery = client.NewQuery(wavefront.NewQueryParams(*pq))
+	config.PartnQuery.SetStartTime(int64(config.Span * time.Second)
 }
 
 func main() {
-	// Init, validate dd client.
-	config.Client = dd.NewClient(config.APIKey, config.AppKey)
+	// Init, validate wf client.
+	config.Client = wf.NewClient(&wf.Config{
+    Address: fmt.Sprintf("wfproxy.int.%s.honeycomb.io", c.Environment),
+    Token:   config.APIKey,
+  }
 	ok, err := config.Client.Validate()
 	exitOnErr(err)
 
